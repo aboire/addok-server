@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  addok-server-standalone:
+    image: communecter/addok-server-standalone
+    privileged: true
+    environment:
+      ADDOK_FILTERS: citycode,postcode,type
+      ADDOK_CLUSTER_NUM_NODES: 1
+      UPDATE_INTERVAL: 100
+      ADDOK_REDIS_STARTUP_TIMEOUT: 30000
+    ports:
+      - '5000:5000'
+    volumes:
+      - addok-data:/data
+
+volumes:
+  addok-data:
