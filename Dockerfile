@@ -1,11 +1,27 @@
 # Stage 1
-FROM nikolaik/python-nodejs:python3.10-nodejs20-slim AS build
+FROM nikolaik/python-nodejs:python3.10-nodejs20-bullseye AS build
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential gcc
+# Installer les dépendances nécessaires (Tini, Python, unzip, wget, netcat, build-essential, gcc)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    unzip \
+    wget && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+# Copier les binaires nécessaires dans un répertoire temporaire
+RUN mkdir -p /opt/unzip /opt/wget /opt/wget-libs /opt/tini /opt/netcat/ /opt/netcat-libs/
+RUN cp -a /usr/bin/unzip /opt/unzip/
+RUN ldd /usr/bin/wget | awk '{ if ($3 ~ /^\//) print $3 }' | xargs -I{} cp -v {} /opt/wget-libs/
+RUN cp -a /usr/bin/wget /opt/wget/
 
 COPY package.json yarn.lock ./
 RUN yarn install --prod --frozen-lockfile
+
+# Désactiver la barre de progression pip
+RUN pip config --user set global.progress_bar off
 
 COPY requirements.txt ./
 RUN pip install --user -r requirements.txt
@@ -17,13 +33,15 @@ FROM --platform=linux/amd64 redis:7.0 AS redis
 FROM nikolaik/python-nodejs:python3.10-nodejs20-slim
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y unzip wget && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY --from=redis /usr/local/bin/redis-server /usr/local/bin/redis-server
+COPY --from=redis /usr/local/bin/redis-cli /usr/local/bin/redis-cli
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /root/.local /root/.local
+
+# Copier les outils depuis l'étape builder
+COPY --from=build /opt/unzip/* /usr/bin/
+COPY --from=build /opt/wget/* /usr/bin/
+COPY --from=build /opt/wget-libs/* /usr/lib/
 
 COPY . .
 

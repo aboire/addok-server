@@ -178,3 +178,6 @@ dist
 
 /data
 *.zip
+addok-server-974/addok.conf
+addok-server-974/addok.db
+addok-server-974/dump.rdb
