@@ -1,5 +1,44 @@
 # addok-server
 
+## Notes sur le fork
+
+[communecter/addok-server](https://hub.docker.com/r/communecter/addok-server)
+
+### Ajout : Génération d'images Docker **addok-server** par département
+
+#### Variables d'environnement requises
+
+Pour configurer le processus de génération, les variables suivantes doivent être définies :
+
+- **`DEPARTEMENT`** : Code du département pour lequel générer l'image (exemple : `974`).
+- **`REPO_PREFIX`** *(optionnelle)* : Préfixe du registre Docker pour nommer les images (exemple : `communecter`).
+- **`PUSH_IMAGE`** *(optionnelle)* : Définit à `true` si vous souhaitez pousser automatiquement les images générées vers un registre Docker.
+
+#### Exemple de commande
+
+```bash
+DEPARTEMENT=974 REPO_PREFIX=communecter PUSH_IMAGE=true ./run.sh
+```
+
+Cette commande :
+1. Génère une image Docker au format : `REPO_PREFIX/addok-server-[DEPARTEMENT]`.
+2. Prépare un fichier `docker-compose-[DEPARTEMENT].yml` pour faciliter le déploiement.
+3. Si **`PUSH_IMAGE`** est défini à `true`, pousse l'image vers le registre Docker spécifié dans **`REPO_PREFIX`**.
+
+---
+
+### Ajout : Création d'une image Docker autonome **addok-server-standalone**
+
+**Nouveauté :** Une nouvelle image, nommée [addok-server-standalone](https://hub.docker.com/r/communecter/addok-server-standalone), permet :
+
+1. **Téléchargement automatique des données géographiques de toute la France** lors du lancement du conteneur.
+2. **Mise à jour des données périodique**, basée sur la variable d'environnement **`UPDATE_INTERVAL`**.
+
+Les fichiers se trouvent dans le répertoire `addok-server-standalone`.
+
+---
+
+
 [![node-current](https://img.shields.io/badge/node-%3E%3D%2018.12-brightgreen)](https://img.shields.io/badge/node-%3E%3D%2018.12-brightgreen) [![Coverage Status](https://coveralls.io/repos/github/livingdata-co/addok-server/badge.svg)](https://coveralls.io/github/livingdata-co/addok-server)
 
 A full-featured HTTP API for addok
