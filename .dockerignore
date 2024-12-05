@@ -13,4 +13,6 @@ docker-compose.yml
 docker-compose-build.yml
 addok-dep-template/
 addok-server-standalone/
+addok-server-standalone-supervisor/
+docker-compose-974.yml
 addok-data/

@@ -32,7 +32,7 @@ Cette commande :
 **Nouveauté :** Une nouvelle image, nommée [addok-server-standalone](https://hub.docker.com/r/communecter/addok-server-standalone), permet :
 
 1. **Téléchargement automatique des données géographiques de toute la France** lors du lancement du conteneur.
-2. **Mise à jour des données périodique**, basée sur la variable d'environnement **`UPDATE_INTERVAL`**.
+2. **Mise à jour des données périodique**, à 1h du matin chaque jour (heure de Paris).
 
 Les fichiers se trouvent dans le répertoire `addok-server-standalone`.
 
