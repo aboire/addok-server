@@ -7,12 +7,12 @@ services:
     environment:
       ADDOK_FILTERS: citycode,postcode,type
       ADDOK_CLUSTER_NUM_NODES: 1
-      UPDATE_INTERVAL: 86400
       ADDOK_REDIS_STARTUP_TIMEOUT: 30000
     ports:
       - '5000:5000'
     volumes:
-      - addok-data:/data
+      - ./logs:/var/log
+#       - addok-data:/data
 
-volumes:
-  addok-data:
+# volumes:
+#   addok-data:

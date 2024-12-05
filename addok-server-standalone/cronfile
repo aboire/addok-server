@@ -1,0 +1,6 @@
+MAILTO=""
+SHELL=/bin/bash
+TZ=Europe/Paris
+
+# Mise à jour des données à 1H du matin
+* 1 * * * bash -c ". /root/project_env.sh; /docker-entrypoint.sh prepare_data > /var/log/update.log" 2>&1
